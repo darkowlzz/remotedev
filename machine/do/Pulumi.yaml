@@ -1,0 +1,6 @@
+name: do
+runtime:
+  name: go
+  options:
+    binary: do
+description: Setup a digital ocean droplet for development.

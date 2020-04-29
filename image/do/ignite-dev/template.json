@@ -1,0 +1,36 @@
+{
+    "variables": {
+        "do_token": "",
+        "image_name": "",
+        "region": ""
+    },
+    "builders": [
+        {
+            "type": "digitalocean",
+            "api_token": "{{ user `do_token` }}",
+            "snapshot_name": "{{ user `image_name` }}",
+            "ssh_username": "root",
+            "image": "ubuntu-18-04-x64",
+            "region": "{{ user `region` }}",
+            "size": "512mb"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "users",
+            "destination": "/tmp/users"
+        },
+        {
+            "type": "file",
+            "source": "bash_profile",
+            "destination": "/tmp/bash_profile"
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "setup.sh"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+secrets.sh
+config.yaml
+.ssh
+.pulumi
+Pulumi.*.yaml
+.temp-do-ssh-key.json
+.temp-do-ssh-key-details.json

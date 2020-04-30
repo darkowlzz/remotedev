@@ -6,6 +6,17 @@ set -e
 apt-get update -y
 apt-get upgrade -y
 
+# Install golang.
+sudo add-apt-repository ppa:longsleep/golang-backports -y
+sudo apt update -y
+sudo apt install -y --no-install-recommends golang-go
+
+# Install kubectl with autocompletion.
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+sudo kubectl completion bash > /etc/bash_completion.d/kubectl
+
 # Install all the dependencies for ignite. Install docker for container tooling.
 # This installs containerd as well.
 apt-get install -y --no-install-recommends dmsetup openssh-client git binutils \
@@ -29,8 +40,10 @@ if [ -f "$USERS_FILE" ]; then
     echo "creating new users..."
     newusers $USERS_FILE
     adduser $USERNAME sudo
+
     # Grant docker group access to the user.
     usermod -aG docker $USERNAME
+
     # Copy bash profile for the user and change the ownership.
     cp $BASH_PROFILE_SRC $BASH_PROFILE
     chown $USERNAME:$USERNAME $BASH_PROFILE

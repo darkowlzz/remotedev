@@ -7,7 +7,7 @@ SETUP_DIR ?= envsetup
 
 STACK_NAME ?= remotedev
 
-CONTAINER_IMAGE ?= gcr.io/sunny-275510/pulumi:test14
+CONTAINER_IMAGE ?= darkowlzz/remotedev:v0.0.1
 
 
 help: ## Display this help.
@@ -31,9 +31,8 @@ deps: ## Install all the dependencies and configurations before provisioning a m
 distclean: clean ## Cleanup everything, machine, config and generated files.
 	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/delete-stack.sh $(STACK_NAME)
 	bash $(SETUP_DIR)/delete-ssh-key.sh
-	rm -rf .ssh/ .pulumi/ config.yaml
+	rm -rf .ssh/ .pulumi/ .sync/ config.yaml
 
-# This is required for copying private content that can't be accessed from
-# public network but the source needs to be copied to the machine to use it.
-cp: ## Copy files to the machine.
-	echo "Unimplemented"
+sync: ## Syncs the specified directory in config to the remote machine.
+	bash $(SETUP_DIR)/sync-local.sh
+	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/sync-remote.sh

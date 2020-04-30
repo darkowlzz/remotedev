@@ -13,7 +13,9 @@ COPY --from=build /root/.pulumi/bin/* /usr/local/bin/
 COPY --from=build /usr/local/go/bin/go /usr/local/bin/
 # Update any old certs in the image and copy pulumi plugins.
 RUN apt-get update -y && \
-    apt-get install ca-certificates openssh-client -y && \
+    apt-get install ca-certificates openssh-client curl rsync -y && \
+    curl -Lo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64 && \
+    chmod +x /usr/local/bin/yq && \
     mkdir -p /root/.pulumi/plugins
 COPY --from=build /root/.pulumi/plugins/ /root/.pulumi/plugins/
 

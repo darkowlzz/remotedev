@@ -23,6 +23,7 @@ Targets:
   ssh         SSH into the machine.
   deps        Install all the dependencies and configurations before provisioning a machine.
   distclean   Cleanup everything, machine, config and generated files.
+  sync        Syncs the specified directory in config to the remote machine.
 ```
 
 All the operations run within container and any other dependency or
@@ -110,8 +111,8 @@ config.yaml file.
 
 ```console
 $ make up
-bash envsetup/run-in-docker.sh gcr.io/sunny-275510/pulumi:test14 envsetup/up.sh remotedev
-Using container image: gcr.io/sunny-275510/pulumi:test14
+bash envsetup/run-in-docker.sh darkowlzz/remotedev:v0.0.1 envsetup/up.sh remotedev
+Using container image: darkowlzz/remotedev:v0.0.1
 Logged into e33244493cf2 as root (file://~)
 remotedev not found, creating a new stack...
 Created stack 'remotedev'
@@ -138,8 +139,8 @@ Access the machine using `make ssh`:
 
 ```console
 $ make ssh
-bash envsetup/run-in-docker.sh gcr.io/sunny-275510/pulumi:test14 envsetup/ssh.sh remotedev
-Using container image: gcr.io/sunny-275510/pulumi:test14
+bash envsetup/run-in-docker.sh darkowlzz/remotedev:v0.0.1 envsetup/ssh.sh remotedev
+Using container image: darkowlzz/remotedev:v0.0.1
 Connecting to 159.65.159.117
 ...
 Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-66-generic x86_64)
@@ -149,14 +150,59 @@ Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-66-generic x86_64)
 root@darkowlzz-dev-env-20c489c:~#
 ```
 
+### Sync files to the machine
+
+For syncing a local source to a remote destination, add the remote username as
+owner, source and destination of the files in the config file. The values must
+be absolute paths on local and remote.
+
+```yaml
+owner: demouser
+source: /Users/darkowlzz/code/projectx
+destination: /home/demouser/code
+```
+
+The destination must be the directory to which the source will be synced to.
+
+Run `make sync` to start the sync. A local sync is performed first. All the
+source files are rsynced into `.sync/` dir, excluding the `.git/` directory and
+all the files listed in `.gitignore` of the source. Then a remote sync is
+performed, copying the local sync directory files to the remote target location.
+This ensures that only the minimum amount of files are copied and no sensitive
+files are copied to remote. Running `make sync` again will copy only the
+difference in the source and destination, reducing the sync time. The initial
+sync time is usually long but the subsequent sync time are short.
+
+```console
+$ make sync
+bash envsetup/sync-local.sh
+/go/src/github.com/weaveworks/ignite /go/src/github.com/darkowlzz/remotedev/machine/do
+Copying /go/src/github.com/weaveworks/ignite into local sync dir /go/src/github.com/darkowlzz/remotedev/machine/do/.sync/ignite...
+/go/src/github.com/darkowlzz/remotedev/machine/do
+bash envsetup/run-in-docker.sh darkowlzz/remotedev:v0.0.1 envsetup/sync-remote.sh
+Using container image: darkowlzz/remotedev:v0.0.1
+Syncing ignite to 139.59.20.129:/home/demouser/go/src/github.com/weaveworks...
+sending incremental file list
+ignite/
+ignite/.dockerignore
+ignite/.grenrc.js
+ignite/.readthedocs.yml
+ignite/.travis.yml
+ignite/CHANGELOG.md
+...
+sent 7.29M bytes  received 71.37K bytes  61.13K bytes/sec
+total size is 27.78M  speedup is 3.77
+Sync complete.
+```
+
 ### Delete the machine
 
 Delete the machine with `make clean`:
 
 ```console
 $ make clean
-bash envsetup/run-in-docker.sh gcr.io/sunny-275510/pulumi:test14 envsetup/destroy.sh remotedev
-Using container image: gcr.io/sunny-275510/pulumi:test14
+bash envsetup/run-in-docker.sh darkowlzz/remotedev:v0.0.1 envsetup/destroy.sh remotedev
+Using container image: darkowlzz/remotedev:v0.0.1
 Destroying (remotedev):
      Type                           Name               Status
  -   pulumi:pulumi:Stack            do-remotedev      deleted

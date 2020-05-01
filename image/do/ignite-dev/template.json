@@ -23,6 +23,11 @@
         },
         {
             "type": "file",
+            "source": "bashrc",
+            "destination": "/tmp/bashrc"
+        },
+        {
+            "type": "file",
             "source": "bash_profile",
             "destination": "/tmp/bash_profile"
         },

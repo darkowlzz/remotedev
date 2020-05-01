@@ -18,5 +18,5 @@ mkdir -p "$PWD/.sync"
 local_copy="$PWD/.sync/$base_dir"
 pushd $source_dir
     echo "Copying $source_dir into local sync dir $local_copy..."
-    rsync -avzq --exclude .git/ --exclude .gitignore . $local_copy
+    rsync -avzq --exclude .git/ --exclude-from .gitignore . $local_copy
 popd

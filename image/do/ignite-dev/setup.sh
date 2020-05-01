@@ -6,6 +6,8 @@ set -e
 apt-get update -y
 apt-get upgrade -y
 
+sudo apt-get install -y --no-install-recommends build-essential
+
 # Install golang.
 sudo add-apt-repository ppa:longsleep/golang-backports -y
 sudo apt update -y
@@ -32,6 +34,9 @@ curl -sSL https://github.com/containernetworking/plugins/releases/download/${CNI
 USERNAME=demouser
 # users file contains list of users to be created using newusers command.
 USERS_FILE=/tmp/users
+# bashrc path.
+BASHRC_SRC=/tmp/bashrc
+BASHRC=/home/demouser/.bashrc
 # bash profile path.
 BASH_PROFILE_SRC=/tmp/bash_profile
 BASH_PROFILE=/home/demouser/.bash_profile
@@ -43,6 +48,10 @@ if [ -f "$USERS_FILE" ]; then
 
     # Grant docker group access to the user.
     usermod -aG docker $USERNAME
+
+    # Copy bashrc for the user and change the ownership.
+    cp $BASHRC_SRC $BASHRC
+    chown $USERNAME:$USERNAME $BASHRC
 
     # Copy bash profile for the user and change the ownership.
     cp $BASH_PROFILE_SRC $BASH_PROFILE

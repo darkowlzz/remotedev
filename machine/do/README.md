@@ -23,7 +23,8 @@ Targets:
   ssh         SSH into the machine.
   deps        Install all the dependencies and configurations before provisioning a machine.
   distclean   Cleanup everything, machine, config and generated files.
-  sync        Syncs the specified directory in config to the remote machine.
+  push        Push pushes the specified directory in config to the remote machine.
+  pull        Pull pulls the specified remote directory in the config to the local directory.
 ```
 
 All the operations run within container and any other dependency or
@@ -164,17 +165,17 @@ destination: /home/demouser/code
 
 The destination must be the directory to which the source will be synced to.
 
-Run `make sync` to start the sync. A local sync is performed first. All the
+Run `make push` to start the sync. A local sync is performed first. All the
 source files are rsynced into `.sync/` dir, excluding the `.git/` directory and
 all the files listed in `.gitignore` of the source. Then a remote sync is
 performed, copying the local sync directory files to the remote target location.
 This ensures that only the minimum amount of files are copied and no sensitive
-files are copied to remote. Running `make sync` again will copy only the
+files are copied to remote. Running `make push` again will copy only the
 difference in the source and destination, reducing the sync time. The initial
-sync time is usually long but the subsequent sync time are short.
+sync time is usually long but the subsequent sync times are short.
 
 ```console
-$ make sync
+$ make push
 bash envsetup/sync-local.sh
 /go/src/github.com/weaveworks/ignite /go/src/github.com/darkowlzz/remotedev/machine/do
 Copying /go/src/github.com/weaveworks/ignite into local sync dir /go/src/github.com/darkowlzz/remotedev/machine/do/.sync/ignite...
@@ -194,6 +195,9 @@ sent 7.29M bytes  received 71.37K bytes  61.13K bytes/sec
 total size is 27.78M  speedup is 3.77
 Sync complete.
 ```
+
+Similarly, to pull changes made in the remote to local, run `make pull`. This
+will pull only the changed file and new files back to the local repo.
 
 ### Delete the machine
 

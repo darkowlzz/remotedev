@@ -33,6 +33,10 @@ distclean: clean ## Cleanup everything, machine, config and generated files.
 	bash $(SETUP_DIR)/delete-ssh-key.sh
 	rm -rf .ssh/ .pulumi/ .sync/ config.yaml
 
-sync: ## Syncs the specified directory in config to the remote machine.
+push: ## Push pushes the specified directory in config to the remote machine.
 	bash $(SETUP_DIR)/sync-local.sh
 	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/sync-remote.sh
+
+pull: ## Pull pulls the specified remote directory in the config to the local directory.
+	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/pull-remote.sh
+	bash $(SETUP_DIR)/pull-local.sh

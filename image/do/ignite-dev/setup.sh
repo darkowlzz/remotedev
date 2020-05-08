@@ -36,10 +36,13 @@ USERNAME=demouser
 USERS_FILE=/tmp/users
 # bashrc path.
 BASHRC_SRC=/tmp/bashrc
-BASHRC=/home/demouser/.bashrc
+BASHRC="/home/$USERNAME/.bashrc"
 # bash profile path.
 BASH_PROFILE_SRC=/tmp/bash_profile
-BASH_PROFILE=/home/demouser/.bash_profile
+BASH_PROFILE="/home/$USERNAME/.bash_profile"
+# gitconfig path.
+GITCONFIG_SRC=/tmp/gitconfig
+GITCONFIG="/home/$USERNAME/.gitconfig"
 
 if [ -f "$USERS_FILE" ]; then
     echo "creating new users..."
@@ -56,4 +59,8 @@ if [ -f "$USERS_FILE" ]; then
     # Copy bash profile for the user and change the ownership.
     cp $BASH_PROFILE_SRC $BASH_PROFILE
     chown $USERNAME:$USERNAME $BASH_PROFILE
+
+    # Copy gitconfig for the user and change the ownership.
+    cp $GITCONFIG_SRC $GITCONFIG
+    chown $USERNAME:$USERNAME $GITCONFIG
 fi

@@ -1,0 +1,15 @@
+[core]
+  editor = vim
+  excludesfile = ~/.gitignore
+[alias]
+  br = branch
+  ci = commit
+  co = checkout
+  st = status
+  lg = log --graph --pretty=format:'%C(yellow)%h%C(auto)%d%Creset %s %C(white)- %an, %ar%Creset'
+[color]
+  ui = true
+[filter "lfs"]
+  required = true
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f

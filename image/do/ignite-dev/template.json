@@ -32,6 +32,11 @@
             "destination": "/tmp/bash_profile"
         },
         {
+            "type": "file",
+            "source": "gitconfig",
+            "destination": "/tmp/gitconfig"
+        },
+        {
             "type": "shell",
             "scripts": [
                 "setup.sh"

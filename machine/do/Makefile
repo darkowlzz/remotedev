@@ -40,3 +40,7 @@ push: ## Push pushes the specified directory in config to the remote machine.
 pull: ## Pull pulls the specified remote directory in the config to the local directory.
 	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/pull-remote.sh
 	bash $(SETUP_DIR)/pull-local.sh
+
+tunnel: ## Create a socks5 tunnel to the machine (from host).
+	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/tunnel.sh $(STACK_NAME)
+	bash .tunnel.sh

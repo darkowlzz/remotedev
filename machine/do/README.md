@@ -199,6 +199,23 @@ Sync complete.
 Similarly, to pull changes made in the remote to local, run `make pull`. This
 will pull only the changed file and new files back to the local repo.
 
+### Route web browser traffic through the machine
+
+In order to access web applications running in the remote machine on a local web
+browser, run `make tunnel` to create a SOCKS5 proxy to the remote machine. Once
+the tunnel is created, change the web browser network settings to use the proxy
+port. Find more details in the article [How To Route Web Traffic Securely
+Without a VPN Using a SOCKS
+Tunnel](https://www.digitalocean.com/community/tutorials/how-to-route-web-traffic-securely-without-a-vpn-using-a-socks-tunnel).
+
+```console
+$ make tunnel
+bash envsetup/run-in-docker.sh darkowlzz/remotedev:v0.0.1 envsetup/tunnel.sh remotedev
+Using container image: darkowlzz/remotedev:v0.0.1
+Creating SOCKS5 tunnel to 142.93.209.4 at port 8123 ...
+bash .tunnel.sh
+```
+
 ### Delete the machine
 
 Delete the machine with `make clean`:
@@ -234,7 +251,7 @@ To delete everything, run `make distclean`, this will delete all the generated
 configurations and delete the DO ssh key from the DO account. `secrets.sh` is
 not deleted and can be reused.
 
-## Pulumi Container Image
+## Remotedev Container Image
 
 The container image used for this contains pulumi, pulumi plugins, go and the
 pulumi go program that defines what to provision, precompiled. Although the

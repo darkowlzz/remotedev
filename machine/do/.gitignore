@@ -6,3 +6,4 @@ Pulumi.*.yaml
 .temp-do-ssh-key.json
 .temp-do-ssh-key-details.json
 .sync
+.tunnel.sh

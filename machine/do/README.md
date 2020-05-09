@@ -21,10 +21,12 @@ Targets:
   clean       Delete the machine.
   status      Show the machine status.
   ssh         SSH into the machine.
+  dev         SSH for development as the configured "owner" user in the "source" directory.
   deps        Install all the dependencies and configurations before provisioning a machine.
   distclean   Cleanup everything, machine, config and generated files.
   push        Push pushes the specified directory in config to the remote machine.
   pull        Pull pulls the specified remote directory in the config to the local directory.
+  tunnel      Create a SOCKS5 tunnel to the machine (from host).
 ```
 
 All the operations run within container and any other dependency or
@@ -198,6 +200,26 @@ Sync complete.
 
 Similarly, to pull changes made in the remote to local, run `make pull`. This
 will pull only the changed file and new files back to the local repo.
+
+### Log into the project directory
+
+To ssh into the machine as a non-root user (`owner` in config) at the project
+directory (`<destination>/<$(basename source)>` in config), run `make dev`.
+
+```console
+$ make dev
+bash envsetup/run-in-docker.sh darkowlzz/remotedev:v0.0.1 envsetup/dev.sh remotedev
+Using container image: darkowlzz/remotedev:v0.0.1
+Loggin as demouser at /home/demouser/go/src/github.com/weaveworks/ignite
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+demouser@darkowlzz-dev-env-ba55e81:~/go/src/github.com/weaveworks/ignite
+$
+```
+
+This can be used to quickly connect to the remote as the development (non-root)
+user at the project directory.
 
 ### Route web browser traffic through the machine
 

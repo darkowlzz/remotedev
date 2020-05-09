@@ -25,6 +25,9 @@ status: ## Show the machine status.
 ssh: ## SSH into the machine.
 	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/ssh.sh $(STACK_NAME)
 
+dev: ## SSH for development as the configured "owner" user in the "source" directory.
+	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/dev.sh $(STACK_NAME)
+
 deps: ## Install all the dependencies and configurations before provisioning a machine.
 	bash $(SETUP_DIR)/deps.sh
 
@@ -41,6 +44,6 @@ pull: ## Pull pulls the specified remote directory in the config to the local di
 	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/pull-remote.sh
 	bash $(SETUP_DIR)/pull-local.sh
 
-tunnel: ## Create a socks5 tunnel to the machine (from host).
+tunnel: ## Create a SOCKS5 tunnel to the machine (from host).
 	bash $(SETUP_DIR)/run-in-docker.sh $(CONTAINER_IMAGE) $(SETUP_DIR)/tunnel.sh $(STACK_NAME)
 	bash .tunnel.sh

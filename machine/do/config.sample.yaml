@@ -4,6 +4,8 @@ region: rgncode
 size: s-1vcpu-1gb
 sshKeys:
   # - sshkeyid
+tags:
+  - remotedev
 pulumi:
   stack: remotedev
 # owner: demouser

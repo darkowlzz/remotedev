@@ -21,7 +21,7 @@ TEMP_DO_SSH_KEY_FILE="$PWD/.temp-do-ssh-key.json"
 TEMP_DO_SSH_KEY_DETAILS="$PWD/.temp-do-ssh-key-details.json"
 
 DEFAULT_STACK="remotedev"
-DEFAULT_CONTAINER_IMAGE="darkowlzz/remotedev:v0.0.1"
+DEFAULT_CONTAINER_IMAGE="darkowlzz/remotedev:v0.0.2"
 
 JQ='docker run --rm -i imega/jq -c'
 YQ='docker run --rm -v '${PWD}':/workdir mikefarah/yq yq'

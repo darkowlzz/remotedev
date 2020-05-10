@@ -7,7 +7,7 @@ SETUP_DIR ?= envsetup
 
 STACK_NAME ?= remotedev
 
-CONTAINER_IMAGE ?= darkowlzz/remotedev:v0.0.1
+CONTAINER_IMAGE ?= darkowlzz/remotedev:v0.0.2
 
 
 help: ## Display this help.

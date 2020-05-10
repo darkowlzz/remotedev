@@ -32,6 +32,7 @@ func main() {
 		Region:  pulumi.String(viper.GetString("region")),
 		Size:    pulumi.String(viper.GetString("size")),
 		SshKeys: pulumi.StringArray{},
+		Tags:    pulumi.StringArray{},
 	}
 
 	// Read ssh key IDs from the config file.
@@ -41,6 +42,14 @@ func main() {
 		sshkeys = append(sshkeys, pulumi.String(id))
 	}
 	droplet.SshKeys = sshkeys
+
+	// Read tags from the config file.
+	tags := pulumi.StringArray{}
+	readTags := viper.GetStringSlice("tags")
+	for _, tag := range readTags {
+		tags = append(tags, pulumi.String(tag))
+	}
+	droplet.Tags = tags
 
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		// Image:  pulumi.String("ubuntu-18-04-x64"),

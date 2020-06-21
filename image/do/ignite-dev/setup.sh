@@ -30,6 +30,12 @@ export ARCH=$([ $(uname -m) = "x86_64" ] && echo amd64 || echo arm64)
 mkdir -p /opt/cni/bin
 curl -sSL https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz | tar -xz -C /opt/cni/bin
 
+# Set long ssh session timeouts.
+sudo cat <<EOT >> /etc/ssh/sshd_config
+ClientAliveInterval 120
+ClientAliveCountMax 720
+EOT
+
 # Setup a sudo user.
 USERNAME=demouser
 # users file contains list of users to be created using newusers command.

@@ -2,6 +2,11 @@
 
 set -e
 
+# This script logs into the remote machine, ensures that rsync can be run with
+# the configured owner user by copying the ssh authorized keys from root to the
+# configured user's account. It then runs rsync to sync the remote source with
+# a local destination.
+
 source envsetup/vars.sh
 
 # YQ runs in a container. Pass config file path in the container.

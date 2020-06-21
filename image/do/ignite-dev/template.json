@@ -33,8 +33,18 @@
         },
         {
             "type": "file",
+            "source": "bash_aliases",
+            "destination": "/tmp/bash_aliases"
+        },
+        {
+            "type": "file",
             "source": "gitconfig",
             "destination": "/tmp/gitconfig"
+        },
+        {
+            "type": "file",
+            "source": "init.vim",
+            "destination": "/tmp/init.vim"
         },
         {
             "type": "shell",

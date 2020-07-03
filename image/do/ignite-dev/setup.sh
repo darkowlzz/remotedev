@@ -4,7 +4,7 @@ set -e
 
 # Update the system.
 apt-get update -y
-apt-get upgrade -y
+# apt-get upgrade -y
 
 # - python3-setuptools and python-pip are required for deoplete.nvim to install
 # pynvim.
@@ -14,15 +14,16 @@ apt-get upgrade -y
 sudo apt-get install -y --no-install-recommends build-essential \
     python3-setuptools python3-pip silversearcher-ag ripgrep
 
+# Install golang.
+GO_VERSION=1.14.4
+wget -O go.tar.gz https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go.tar.gz
+rm go.tar.gz
+
 # Install neovim.
 sudo curl -Lo /usr/local/bin/nvim https://github.com/neovim/neovim/releases/download/v0.4.3/nvim.appimage
 sudo chmod +x /usr/local/bin/nvim
 pip3 install pynvim
-
-# Install golang.
-sudo add-apt-repository ppa:longsleep/golang-backports -y
-sudo apt update -y
-sudo apt install -y --no-install-recommends golang-go
 
 # Install kubectl with autocompletion.
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
@@ -97,4 +98,11 @@ if [ -f "$USERS_FILE" ]; then
     chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
     curl -fLo "/home/$USERNAME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     chown -R $USERNAME:$USERNAME /home/$USERNAME/.local
+
+    # Create ~/.kube/config to avoid any root program from changing the
+    # permission of the default kubeconfig. This happens when KinD-ignite is
+    # run as root.
+    mkdir -p "/home/$USERNAME/.kube"
+    touch "/home/$USERNAME/.kube/config"
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/.kube
 fi

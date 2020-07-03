@@ -10,7 +10,7 @@
             "api_token": "{{ user `do_token` }}",
             "snapshot_name": "{{ user `image_name` }}",
             "ssh_username": "root",
-            "image": "ubuntu-18-04-x64",
+            "image": "ubuntu-20-04-x64",
             "region": "{{ user `region` }}",
             "size": "512mb"
         }

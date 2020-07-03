@@ -99,5 +99,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# Add GOPATH to the PATH.
-export PATH="$HOME/go:$HOME/go/bin:$PATH"
+export GOPATH="$HOME/go"
+# Add go to the PATH.
+export PATH="/usr/local/go/bin:$GOPATH:$GOPATH/bin:$PATH"

@@ -102,4 +102,11 @@ if [ -f "$USERS_FILE" ]; then
     chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
     curl -fLo "/home/$USERNAME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     chown -R $USERNAME:$USERNAME /home/$USERNAME/.local
+
+    # Create ~/.kube/config to avoid any root program from changing the
+    # permission of the default kubeconfig. This happens when KinD-ignite is
+    # run.
+    mkdir -p "/home/$USERNAME/.kube"
+    touch "/home/$USERNAME/.kube/config"
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/.kube
 fi

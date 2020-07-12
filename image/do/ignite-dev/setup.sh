@@ -12,7 +12,12 @@ apt-get upgrade -y
 # - ripgrep is required for recursively searching directories for a regex
 # pattern.
 sudo apt-get install -y --no-install-recommends build-essential \
-    python3-setuptools python3-pip silversearcher-ag ripgrep
+    python3-setuptools python3-pip silversearcher-ag
+
+# Install ripgrep.
+curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
+sudo dpkg -i ripgrep_11.0.2_amd64.deb
+rm ripgrep_11.0.2_amd64.deb
 
 # Install neovim.
 sudo curl -Lo /usr/local/bin/nvim https://github.com/neovim/neovim/releases/download/v0.4.3/nvim.appimage

@@ -12,7 +12,7 @@ apt-get upgrade -y
 # - ripgrep is required for recursively searching directories for a regex
 # pattern.
 sudo apt-get install -y --no-install-recommends build-essential \
-    python3-setuptools python3-pip silversearcher-ag
+    python3-setuptools python3-pip silversearcher-ag zip
 
 # Install ripgrep.
 curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
@@ -24,10 +24,9 @@ sudo curl -Lo /usr/local/bin/nvim https://github.com/neovim/neovim/releases/down
 sudo chmod +x /usr/local/bin/nvim
 pip3 install pynvim
 
-# Install golang.
-sudo add-apt-repository ppa:longsleep/golang-backports -y
-sudo apt update -y
-sudo apt install -y --no-install-recommends golang-go
+# Install gimme for golang.
+sudo curl -sL -o /usr/local/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme \
+    && chmod +x /usr/local/bin/gimme
 
 # Install kubectl with autocompletion.
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
@@ -114,4 +113,14 @@ if [ -f "$USERS_FILE" ]; then
     mkdir -p "/home/$USERNAME/.kube"
     touch "/home/$USERNAME/.kube/config"
     chown -R $USERNAME:$USERNAME /home/$USERNAME/.kube
+
+    # Install docker buildx.
+    # NOTE: Enabling docker cli experimental doesn't installs buildx
+    # automatically as documented. Downloading the binary is more reliable.
+    mkdir -p /home/$USERNAME/.docker/cli-plugins
+    curl -Lo docker-buildx https://github.com/docker/buildx/releases/download/v0.4.1/buildx-v0.4.1.linux-amd64 \
+        && chmod +x docker-buildx \
+        && mv docker-buildx /home/$USERNAME/.docker/cli-plugins/
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/.docker
+
 fi

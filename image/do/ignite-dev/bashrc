@@ -59,8 +59,9 @@ unset color_prompt force_color_prompt
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    #PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)")\[\e[0;39m\]\n\$ '
+    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    # PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)")\[\e[0;39m\]\n\$ '
+    PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)")\n\[\e[1;34m\]\](\@) \[\e[0;39m\]\$ '
     ;;
 *)
     ;;
@@ -98,6 +99,9 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+
+# Install and setup go environment.
+eval "$(gimme 1.14.6)"
 
 export GOPATH="$HOME/go"
 # Add GOPATH to the PATH.

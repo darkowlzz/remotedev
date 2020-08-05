@@ -35,6 +35,11 @@ chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 sudo kubectl completion bash > /etc/bash_completion.d/kubectl
 
+# Install kustomize.
+curl -s "https://raw.githubusercontent.com/\
+kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+sudo mv kustomize /usr/local/bin/
+
 # Install all the dependencies for ignite. Install docker for container tooling.
 # This installs containerd as well.
 apt-get install -y --no-install-recommends dmsetup openssh-client git binutils \

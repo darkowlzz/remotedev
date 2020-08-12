@@ -59,9 +59,9 @@ unset color_prompt force_color_prompt
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
     # PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)")\[\e[0;39m\]\n\$ '
-    PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)")\n\[\e[1;34m\]\](\@) \[\e[0;39m\]\$ '
+    # PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)") \[\e[1;34m\]\][\@]\n\[\e[0;39m\]\$ '
     ;;
 *)
     ;;
@@ -99,6 +99,55 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+
+# Last command run time, based on
+# https://jakemccrary.com/blog/2015/05/03/put-the-last-commands-run-time-in-your-bash-prompt/
+function timer_start {
+  timer=${timer:-$SECONDS}
+}
+
+function timer_stop {
+  timer_show=$(($SECONDS - $timer))
+  unset timer
+}
+
+trap 'timer_start' DEBUG
+
+if [ "$PROMPT_COMMAND" == "" ]; then
+  PROMPT_COMMAND="timer_stop"
+else
+  PROMPT_COMMAND="$PROMPT_COMMAND; timer_stop"
+fi
+
+# Last command exit status, based on
+# https://scriptingosx.com/2019/05/show-exit-code-in-your-bash-prompt/
+function __build_prompt {
+    local EXIT="$?" # store current exit code
+
+    # define some colors
+    local RESET='\[\e[0m\]'
+    local RED='\[\e[0;31m\]'
+    local GREEN='\[\e[0;32m\]'
+    local BOLD_GRAY='\[\e[1;30m\]'
+    # longer list of codes here: https://unix.stackexchange.com/a/124408
+
+    # start with an empty PS1
+    # PS1=""
+    PS1='\[\e[0;32m\]\u@\[\e[1;34m\]\h\[\e[0m\]\[\e[0m\]:\[\e[1;31m\]\w\[\e[0;32m\]$(__git_ps1 " (%s)")\[\e[1;34m\]\] ${timer_show}s '
+
+    if [[ $EXIT -eq 0 ]]; then
+        PS1+="${GREEN}√${RESET} "      # Add green for success
+    else
+        PS1+="${RED}?️️️${EXIT}${RESET} " # Add red if exit code non 0
+    fi
+    # this is the default prompt for
+    PS1+="${BOLD_GRAY} ${RESET}"
+
+    PS1+='\n\[\e[0;39m\]\$ '
+}
+
+# set the prompt command
+PROMPT_COMMAND="__build_prompt${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
 # Install and setup go environment.
 eval "$(gimme 1.14.6)"

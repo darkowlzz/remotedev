@@ -18,6 +18,9 @@ Plug 'preservim/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'SirVer/ultisnips'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'tsandall/vim-rego'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 
 
@@ -178,3 +181,8 @@ let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
 
 " Others
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+
+
+" vim-rust related configurations
+
+let g:rustfmt_autosave = 1

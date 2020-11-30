@@ -12,15 +12,15 @@ apt-get upgrade -y
 # - ripgrep is required for recursively searching directories for a regex
 # pattern.
 sudo apt-get install -y --no-install-recommends build-essential \
-    python3-setuptools python3-pip silversearcher-ag zip
+    python3-setuptools python3-pip silversearcher-ag zip unzip
 
 # Install ripgrep.
-curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
-sudo dpkg -i ripgrep_11.0.2_amd64.deb
-rm ripgrep_11.0.2_amd64.deb
+curl -LO https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+sudo dpkg -i ripgrep_12.1.1_amd64.deb
+rm ripgrep_12.1.1_amd64.deb
 
 # Install neovim.
-sudo curl -Lo /usr/local/bin/nvim https://github.com/neovim/neovim/releases/download/v0.4.3/nvim.appimage
+sudo curl -Lo /usr/local/bin/nvim https://github.com/neovim/neovim/releases/download/v0.4.4/nvim.appimage
 sudo chmod +x /usr/local/bin/nvim
 pip3 install pynvim
 
@@ -32,12 +32,22 @@ sudo curl -sL -o /usr/local/bin/gimme https://raw.githubusercontent.com/travis-c
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
-sudo kubectl completion bash > /etc/bash_completion.d/kubectl
+sudo sh -c 'kubectl completion bash > /etc/bash_completion.d/kubectl'
 
 # Install kustomize.
 curl -s "https://raw.githubusercontent.com/\
 kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 sudo mv kustomize /usr/local/bin/
+
+# Install kind.
+sudo curl -sL -o /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.8.1/kind-linux-amd64 \
+    && sudo chmod +x /usr/local/bin/kind
+sudo sh -c 'kind completion bash > /etc/bash_completion.d/kind'
+
+# Install k3d.
+sudo curl -sL -o /usr/local/bin/k3d https://github.com/rancher/k3d/releases/download/v3.0.0/k3d-linux-amd64 \
+    && sudo chmod +x /usr/local/bin/k3d
+sudo sh -c 'k3d completion bash > /etc/bash_completion.d/k3d'
 
 # Install all the dependencies for ignite. Install docker for container tooling.
 # This installs containerd as well.
@@ -45,7 +55,7 @@ apt-get install -y --no-install-recommends dmsetup openssh-client git binutils \
     docker.io make
 
 # Install CNI binaries.
-export CNI_VERSION=v0.8.2
+export CNI_VERSION=v0.8.7
 export ARCH=$([ $(uname -m) = "x86_64" ] && echo amd64 || echo arm64)
 mkdir -p /opt/cni/bin
 curl -sSL https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz | tar -xz -C /opt/cni/bin

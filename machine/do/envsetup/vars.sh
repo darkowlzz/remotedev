@@ -24,4 +24,4 @@ DEFAULT_STACK="remotedev"
 DEFAULT_CONTAINER_IMAGE="darkowlzz/remotedev:v0.0.2"
 
 JQ='docker run --rm -i imega/jq -c'
-YQ='docker run --rm -v '${PWD}':/workdir mikefarah/yq yq'
+YQ='docker run --rm -v '${PWD}':/workdir mikefarah/yq:3.4.1 yq'

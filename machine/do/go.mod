@@ -1,6 +1,6 @@
 module github.com/darkowlzz/remotedev/machine/do
 
-go 1.14
+go 1.16
 
 require (
 	github.com/pulumi/pulumi-digitalocean/sdk v0.0.0-20200420130158-461be719ea8e
